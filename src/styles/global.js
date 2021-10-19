@@ -8,12 +8,16 @@ const GlobalStyles = createGlobalStyle`
     :root {
         --red: #880E4F;
         --white: #fff;
+        --black: #222;
     }
 
     body {
         min-height: 100vh;
         width: 100%;
+        font-size: 18px;
+        line-height: 24px;
         font-family: 'Cairo', sans-serif;
+        color: var(--black);
     }
 
 `
