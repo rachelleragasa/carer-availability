@@ -23,7 +23,9 @@ const App = () => {
 }
 
 const MainContent = styled.main`
-  padding: 60px 30px;
+  padding: 60px 20px;
+  max-width: 1440px;
+  margin: 0 auto;
 `
 
 export default App;

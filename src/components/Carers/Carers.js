@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react"
 import axios from "axios"
 import styled from "styled-components"
-import Imgix from "react-imgix"
 import tw from "twin.macro"
 
 import { above } from "../../styles"
+import Button from "../Button/Button"
 
 const Carers = () => {
     const [carers, setCarers] = useState([]);
@@ -13,7 +13,6 @@ const Carers = () => {
         const url = "https://ceracare.github.io/carers.json"
         const { data } = await axios.get(url);
         setCarers(data?.carers);
-
     }
 
     useEffect(() => {
@@ -25,18 +24,16 @@ const Carers = () => {
             {
                 carers.map(({ name, slots, photo }) =>
                     <ListItem key={name}>
-                        {/* <Image> */}
-                            {/* <img src={photo} alt={`Headshot of ${name}`} /> */}
-                            {/* <Imgix src={photo} srcSet={photo} alt={`Headshot of ${name}`} sizes="(min-width: 960px) 33vw, (min-width: 640px) 50vw, 100vw" width={328} height={220} /> */}
-
-                        {/* </Image> */}
-                        {/* <Image src={photo} srcSet={photo} alt={`Headshot of ${name}`} sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" width={328} /> */}
                         <Image>
-                        <img src={photo} alt={name}/>
+                            <img src={photo} alt={name}/>
                         </Image>
-
-                        <Name>{name}</Name>
-                        <NumberOfSlots>{`${slots} slots available`}</NumberOfSlots>
+                        <ListDescription>
+                            <Text>
+                                <Name>{name}</Name>
+                                <NumberOfSlots>{`${slots} slots available`}</NumberOfSlots>
+                            </Text>
+                            <Button text="Check Availability" />
+                        </ListDescription>
                     </ListItem>
                 )
             }
@@ -45,27 +42,59 @@ const Carers = () => {
 }
 
 const CarersList = styled.ul`
-    list-style: none;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    flex-wrap: wrap;
+    ${tw`list-none p-0 m-0 flex flex-wrap flex-col justify-center`};
 
-
-    ${above.tabletLarge`
-        flex-direction: row;
-        flex-wrap: wrap;
+    ${above.tablet`
+        ${tw`flex-row`};
     `}
 
 `
 
 const ListItem = styled.li`
     ${tw`w-full`};
+    margin-bottom: 25px;
+
+    ${above.tablet`
+        ${tw`w-1/2`};
+        max-width: 354px;
+    `};
 
     ${above.tabletLarge`
-        ${tw`w-1/4`};
+        ${tw`w-1/3`};
+        max-width: 323px;
+        margin-right: 5px;
     `};
+
+    ${above.desktop`
+        ${tw`w-1/4`};
+         margin-right: 20px;
+    `}
+
+    &:nth-of-type(odd){
+        margin-right: 20px;
+
+        ${above.tabletLarge`
+            margin-right: 5px;
+        `};
+
+        ${above.desktop`
+             margin-right: 20px;
+        `}
+    }
+
+
+`
+
+const ListDescription = styled.div`
+    ${tw`flex flex-col`};
+
+    ${above.tablet`
+        ${tw`flex-row justify-between`};
+    `}
+`
+
+const Text = styled.div`
+    margin-bottom: 10px;
 `
 
 const Name = styled.p`
@@ -81,16 +110,10 @@ const NumberOfSlots = styled.p`
 const Image = styled.div`
     width: 100%;
     height: 220px;
-
-    ${above.tablet`
-        width: 323px;
-    `};
+    margin-bottom: 10px;
 
     img {
-        object-fit: cover;
-        object-position: center;
-        width: 100%;
-        height: 100%;
+        ${tw`object-cover object-center w-full h-full`};
     }
 
 `
