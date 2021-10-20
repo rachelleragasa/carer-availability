@@ -6,6 +6,7 @@ import Portal from "../Portal/Portal"
 import { above } from "../../styles"
 import { GlobalContext } from "../../contexts/GlobalContext"
 import Button from "../Button/Button"
+import getTimeOfDay from "../../utils/getTimeOfDay"
 
 const Modal = () => {
     const { carerName, availableTimeSlots } = useContext(GlobalContext);
@@ -18,7 +19,7 @@ const Modal = () => {
                     <CarerName>{carerName}</CarerName>
                     <>
                         {
-                            availableTimeSlots?.map((timeSlot) => <StyledButton text={timeSlot} />)
+                            availableTimeSlots?.map((timeSlot) => <StyledButton key={timeSlot} text={getTimeOfDay(timeSlot)} />)
                         }
                     </>
                 </Content>
@@ -29,10 +30,9 @@ const Modal = () => {
 
 const ModalWrapper = styled.div`
     ${tw`fixed left-0 top-0 w-full h-full overflow-auto`};
-    z-index: 1; /* Sit on top */
-    padding-top: 100px; /* Location of the box */
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(196,196,196,0.67); /* Black w/ opacity */
+    z-index: 1;
+    padding-top: 100px;
+    background-color: rgba(196,196,196,0.67);
 
 `
 
