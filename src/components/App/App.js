@@ -5,10 +5,11 @@ import styled from "styled-components"
 import Header from "../Header/Header"
 import GlobalStyles from "../../styles/global"
 import Carers from "../Carers/Carers"
+import GlobalContextProvider from "../../contexts/GlobalContext"
 
 const App = () => {
   return (
-    <>
+    <GlobalContextProvider>
       <Helmet>
         <title>Carer Availability</title>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Cairo:200,300,400,600,700,900" />
@@ -18,7 +19,7 @@ const App = () => {
       <MainContent>
         <Carers />
       </MainContent>
-    </>
+    </GlobalContextProvider>
   );
 }
 

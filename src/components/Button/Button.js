@@ -3,7 +3,7 @@ import styled from "styled-components"
 
 import { above } from "../../styles"
 
-const Button = ({ text, className }) => <StyledButton type="button" className={className}>{text}</StyledButton>
+const Button = ({ text, className, handleClick }) => <StyledButton type="button" onClick={handleClick} className={className}>{text}</StyledButton>
 
 const StyledButton = styled.button`
     background-color: var(--red);

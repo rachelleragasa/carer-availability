@@ -10,6 +10,7 @@ const GlobalStyles = createGlobalStyle`
         --white: #fff;
         --black: #222;
         --blue: #2fa6ff;
+        --grey: #D7D7D7;
     }
 
     body {
@@ -19,6 +20,11 @@ const GlobalStyles = createGlobalStyle`
         line-height: 24px;
         font-family: 'Cairo', sans-serif;
         color: var(--black);
+    }
+
+    #modal {
+        position: relative;
+        // z-index: 999;
     }
 
 `

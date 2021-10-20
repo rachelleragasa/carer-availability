@@ -1,5 +1,6 @@
 import React, { useEffect, useCallback } from "react"
 import styled from "styled-components"
+import tw from "twin.macro"
 
 import CeraLogo from "../../assets/images/logo.png"
 import { above } from "../../styles"
@@ -22,9 +23,8 @@ const Header = () => {
         setInterval(getCurrentTime, 1000);
     }, [getCurrentTime]);
 
-
     return (
-        <Wrapper>
+        <HeaderWrapper>
             <Logo>
                 <img src={CeraLogo} alt="Cera brand logo" />
             </Logo>
@@ -33,14 +33,12 @@ const Header = () => {
                 <SubTitle>Here you'll be able to schedule your carer visits</SubTitle>
             </Introduction>
             <CurrentTime id="clock"></CurrentTime>
-        </Wrapper>
+        </HeaderWrapper>
     )
 }
 
-const Wrapper = styled.header`
-    display: flex;
-    flex-direction: row;
-    align-items: center;
+const HeaderWrapper = styled.header`
+    ${tw`flex flex-row items-center`};
     background-color: var(--red);
     height: 85px;
     padding: 15px;
@@ -52,7 +50,7 @@ const Wrapper = styled.header`
 `
 
 const Introduction = styled.div`
-    flex-grow: 1;
+    ${tw`flex-grow`};
 `
 
 const Logo = styled.div`
@@ -65,17 +63,16 @@ const Logo = styled.div`
     `}
 
     img {
-        width: 100%;
+       ${tw`w-full`};
     }
 
 `
 
 const Title = styled.h1`
+    ${tw`m-0 font-normal`};
     font-size: 28px;
     line-height: 35px;
     color: var(--white);
-    font-weight: 400;
-    margin: 0;
 
     ${above.tabletLarge`
         font-size: 36px;
@@ -84,11 +81,10 @@ const Title = styled.h1`
 `
 
 const SubTitle = styled.h2`
+    ${tw`m-0 font-normal`};
     font-size: 16px;
     line-height: 18px;
     color: var(--white);
-    font-weight: 400;
-    margin: 0;
 
     ${above.tabletLarge`
         font-size: 20px;
