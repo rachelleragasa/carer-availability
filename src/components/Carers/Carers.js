@@ -41,7 +41,6 @@ const Carers = () => {
         const url = "https://ceracare.github.io/bookSlot.json"
         const { data } = await axios.get(url);
         setBookingSuccess(data?.success);
-        console.log(data?.success);
     }
 
     useEffect(() => {
