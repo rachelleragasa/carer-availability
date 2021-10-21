@@ -4,19 +4,11 @@ import tw from "twin.macro"
 
 import CeraLogo from "../../assets/images/logo.png"
 import { above } from "../../styles"
+import getTimeOfDay from "../../utils/getTimeOfDay"
 
 const Header = () => {
     const getCurrentTime = useCallback(() => {
-        const currentTime = new Date();
-        let currentHours = currentTime.getHours();
-        let currentMinutes = currentTime.getMinutes();
-
-        currentMinutes = (currentMinutes < 10 ? "0" : "") + currentMinutes;
-
-        const timeOfDay = currentHours < 12 ? "AM" : "PM"
-        const currentTimeString = `${currentHours}:${currentMinutes} ${timeOfDay}`
-
-        return document.getElementById('clock').innerHTML = currentTimeString;
+        return document.getElementById('clock').innerHTML = getTimeOfDay();
     }, []);
 
     useEffect(() => {
@@ -93,6 +85,7 @@ const SubTitle = styled.h2`
 `
 
 const CurrentTime = styled.div`
+    ${tw`uppercase`};
     font-size: 20px;
     line-height: 28px;
     color: var(--white);
