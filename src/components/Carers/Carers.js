@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from "react"
+import React, { useEffect, useState, useCallback } from "react"
 import axios from "axios"
 import styled from "styled-components"
 import tw from "twin.macro"
@@ -6,10 +6,22 @@ import tw from "twin.macro"
 import { above } from "../../styles"
 import Button from "../Button/Button"
 import Modal from "../Modal/Modal"
-import { GlobalContext } from "../../contexts/GlobalContext"
+import getTimeOfday from "../../utils/getTimeOfDay"
+import SuccessImg from "../../assets/images/check.png"
 
 const Carers = () => {
-    const { carersList, setCarersList, setAvailableTimeSlots, setCarerName, showModal, setShowModal } = useContext(GlobalContext);
+    const [carersList, setCarersList] = useState([]);
+    const [carerName, setCarerName] = useState('');
+    const [availableTimeSlots, setAvailableTimeSlots] = useState([]);
+    const [bookingSuccess, setBookingSuccess] = useState(false);
+
+    const [showModal, setShowModal] = useState(false);
+
+    const toggleModal = useCallback(() => {
+        setShowModal((prevState) => !prevState);
+        setBookingSuccess(false);
+    }, []);
+
 
     const getCarers = async () => {
         const url = "https://ceracare.github.io/carers.json"
@@ -21,9 +33,16 @@ const Carers = () => {
         const url = "https://ceracare.github.io/availableSlots.json"
         const { data } = await axios.get(url);
         setCarerName(name);
-        setShowModal(true);
+        toggleModal();
         return setAvailableTimeSlots(data?.UTCAvailableSlots);
     };
+
+    const bookTimeSlot = async () => {
+        const url = "https://ceracare.github.io/bookSlot.json"
+        const { data } = await axios.get(url);
+        setBookingSuccess(data?.success);
+        console.log(data?.success);
+    }
 
     useEffect(() => {
         getCarers();
@@ -49,7 +68,25 @@ const Carers = () => {
                 )
             }
         </CarersList>
-        {showModal && <Modal />}
+        <Modal showModal={showModal} toggleModal={toggleModal}>
+            <ModalHeading>Schedule Carer</ModalHeading>
+            <ModalSubTitle>{carerName}</ModalSubTitle>
+            <>
+                {
+                    !bookingSuccess && availableTimeSlots?.map((timeSlot) => <ModalButton key={timeSlot} text={getTimeOfday(timeSlot)} handleClick={() => bookTimeSlot()} />)
+                }
+            </>
+            <>
+                {
+                    bookingSuccess && (
+                        <>
+                            <BookingSuccessImg src={SuccessImg} alt="booking success" />
+                            <p>Thanks for booking your slot!</p>
+                        </>
+                    )
+                }
+            </>
+        </Modal>
         </>
     )
 }
@@ -59,8 +96,7 @@ const CarersList = styled.ul`
 
     ${above.tablet`
         ${tw`flex-row`};
-    `}
-
+    `};
 `
 
 const ListItem = styled.li`
@@ -81,7 +117,7 @@ const ListItem = styled.li`
     ${above.desktop`
         ${tw`w-1/4`};
          margin-right: 20px;
-    `}
+    `};
 
     &:nth-of-type(odd){
         margin-right: 20px;
@@ -92,10 +128,8 @@ const ListItem = styled.li`
 
         ${above.desktop`
              margin-right: 20px;
-        `}
+        `};
     }
-
-
 `
 
 const ListDescription = styled.div`
@@ -103,7 +137,7 @@ const ListDescription = styled.div`
 
     ${above.tablet`
         ${tw`flex-row justify-between`};
-    `}
+    `};
 `
 
 const Text = styled.div`
@@ -130,4 +164,34 @@ const Image = styled.div`
     }
 
 `
+
+const ModalHeading = styled.h2`
+    ${tw`font-normal m-0`};
+    font-size: 24px;
+    line-height: 24px;
+
+    ${above.tabletLarge`
+        margin-top: 20px;
+    `};
+`
+
+const ModalSubTitle = styled.p`
+    font-size: 18px;
+    line-height: 24px;
+    margin: 0 0 35px 0;
+`
+
+const ModalButton = styled(Button)`
+    ${tw`font-bold w-full`};
+    margin-bottom: 25px;
+
+    ${above.tabletLarge`
+        width: 248px;
+    `};
+`
+
+const BookingSuccessImg = styled.img`
+    width: 100px;
+`
+
 export default Carers

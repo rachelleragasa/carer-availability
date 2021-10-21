@@ -46,7 +46,7 @@ const HeaderWrapper = styled.header`
     ${above.tabletLarge`
         height: 148px;
         padding: 0 20px;
-    `}
+    `};
 `
 
 const Introduction = styled.div`
@@ -89,7 +89,7 @@ const SubTitle = styled.h2`
     ${above.tabletLarge`
         font-size: 20px;
         line-height: 28px;
-    `}
+    `};
 `
 
 const CurrentTime = styled.div`
@@ -100,7 +100,7 @@ const CurrentTime = styled.div`
     ${above.tabletLarge`
         font-size: 24px;
         line-height: 28px;
-    `}
+    `};
 `
 
 export default Header

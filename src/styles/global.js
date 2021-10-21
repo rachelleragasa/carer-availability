@@ -22,11 +22,23 @@ const GlobalStyles = createGlobalStyle`
         color: var(--black);
     }
 
-    #modal {
-        position: relative;
-        // z-index: 999;
-    }
+    @-webkit-keyframes fade-in {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
 
+      @keyframes fade-in {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
 `
 
 export default GlobalStyles

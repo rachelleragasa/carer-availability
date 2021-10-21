@@ -1,75 +1,75 @@
-import React, { useContext } from "react"
+import React, { useEffect, useRef, useCallback } from "react"
+import { createPortal } from "react-dom";
 import styled from "styled-components"
 import tw from "twin.macro"
 
-import Portal from "../Portal/Portal"
 import { above } from "../../styles"
-import { GlobalContext } from "../../contexts/GlobalContext"
-import Button from "../Button/Button"
-import getTimeOfDay from "../../utils/getTimeOfDay"
 
-const Modal = () => {
-    const { carerName, availableTimeSlots } = useContext(GlobalContext);
+const Modal = ({ children, showModal, toggleModal }) => {
+    const wrapperRef = useRef(null);
 
-    return (
-        <Portal>
-            <ModalWrapper>
-                <Content>
-                    <Heading>Schedule Carer</Heading>
-                    <CarerName>{carerName}</CarerName>
-                    <>
-                        {
-                            availableTimeSlots?.map((timeSlot) => <StyledButton key={timeSlot} text={getTimeOfDay(timeSlot)} />)
-                        }
-                    </>
-                </Content>
-            </ModalWrapper>
-        </Portal>
-    )
+    const closeModal = useCallback(({ target }) => {
+        if (wrapperRef && wrapperRef.current && !wrapperRef.current.contains(target)) {
+            toggleModal();
+        }
+    }, [toggleModal]);
+
+    useEffect(() => {
+        document.addEventListener("click", closeModal, { capture: true });
+
+        return () => {
+            document.removeEventListener("click", closeModal, { capture: true });
+        }
+    }, [closeModal]);
+
+    return showModal ? createPortal(
+        <>
+            <Overlay />
+            <WindowContainer>
+                <ModalContainer>
+                    <ModalContent ref={wrapperRef}>{children}</ModalContent>
+                </ModalContainer>
+            </WindowContainer>
+        </>, document.body
+    ) : null
 }
 
-const ModalWrapper = styled.div`
-    ${tw`fixed left-0 top-0 w-full h-full overflow-auto`};
-    z-index: 1;
-    padding-top: 100px;
-    background-color: rgba(196,196,196,0.67);
-
+const Overlay = styled.div`
+    ${tw`opacity-100 top-0 left-0 right-0 bottom-0 fixed`};
+    transition: opacity 225ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+    z-index: -1;
+    touch-action: none;
+    background-color: rgba(196,196,196, 0.67);
 `
 
-const Content = styled.div`
-    ${tw`flex flex-col items-center m-auto`};
-    width: 90%;
-    background-color: var(--grey);
-    min-height: 374px;
-    border: 1px solid #000;
-
-    ${above.tablet`
-        width: 324px;
-    `}
+const WindowContainer = styled.div`
+    ${tw`fixed top-0 right-0 bottom-0 left-0 overflow-auto outline-none`};
+    animation: fade-in 200ms 0s ease-in-out forwards;
+    z-index: 100;
 `
 
-const Heading = styled.h2`
-    ${tw`font-normal m-0`};
-    font-size: 24px;
-    line-height: 24px;
-    padding-top: 30px;
-
-`
-
-const CarerName = styled.p`
-    font-size: 18px;
-    line-height: 24px;
-    margin: 0 0 35px 0;
-`
-
-const StyledButton = styled(Button)`
-    ${tw`font-bold`};
-    width: 90%;
-    margin-bottom: 25px;
+const ModalContainer = styled.div`
+    ${tw`opacity-100 flex items-center justify-center h-full outline-none`};
+    transition: opacity 225ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+    margin: 0 10px;
 
     ${above.tabletLarge`
-        width: 248px;
-    `}
+        ${tw`m-0`};
+    `};
 `
 
-export default Modal;
+const ModalContent = styled.div`
+    ${tw`w-full flex flex-col relative overflow-y-auto items-center`};
+    min-height: 374px;
+    padding: 20px;
+    background-color: var(--grey);
+    border: 1px solid #000;
+    border-radius: 4px;
+
+    ${above.tabletLarge`
+        width: 324px;
+        padding: 0;
+    `};
+`
+
+export default Modal
